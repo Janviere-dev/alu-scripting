@@ -1,13 +1,14 @@
 #!/usr/bin/python3
-"""Gets titles of top 10 hot posts from subreddit"""
-
+"""Get titles of top 10 hot posts from a subreddit"""
 import requests
 
 
 def top_ten(subreddit):
-    """Prints the titles of the first 10 hot posts"""
-    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
-    headers = {"User-Agent": "python:top.ten:v1.0 (by /u/yourusername)"}
+    """Prints titles of the first 10 hot posts for a given subreddit"""
+    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
+    headers = {
+        "User-Agent": "python:top.ten:v1.0 (by /u/alumunezero)"
+    }
     params = {"limit": 10}
 
     try:
@@ -19,7 +20,9 @@ def top_ten(subreddit):
             return
 
         posts = response.json().get("data", {}).get("children", [])
-        for post in posts:
-            print(post.get("data", {}).get("title"))
-    except Exception:
+        titles = [post["data"]["title"] for post in posts]
+
+        for title in titles:
+            print(title)
+    except requests.RequestException:
         print(None)
